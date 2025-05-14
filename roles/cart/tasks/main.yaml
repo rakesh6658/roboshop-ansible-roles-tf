@@ -1,0 +1,16 @@
+- name: installing nodejs
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: installing-nodejs
+- name: creating user and app directory
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: setup-app
+- name: installing dependencies
+  ansible.builtin.shell: npm install
+  args:
+    chdir: /app   
+- name: copying cart.service and starting and enabling, deamon reload
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: systemdsetup  

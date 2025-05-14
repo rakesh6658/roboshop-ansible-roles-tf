@@ -1,0 +1,9 @@
+- name: Copy mongo.repo
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+        
+- name: installing mongodb-client
+  ansible.builtin.yum:
+    name: mongodb-mongosh
+    state: installed  

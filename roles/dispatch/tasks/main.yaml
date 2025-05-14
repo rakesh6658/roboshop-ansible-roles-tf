@@ -1,0 +1,21 @@
+- name: installing golang
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: installing-golang
+
+- name: creating user and app directory
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: setup-app
+- name: installing dependencies
+  ansible.builtin.shell: "{{item}}"
+  loop:
+    - go mod init dispatch
+    - go get 
+    - go build
+  args:
+    chdir: /app   
+- name: copying user.service and starting and enabling, deamon reload
+  ansible.builtin.import_role:
+    name: common
+    tasks_from: systemdsetup     

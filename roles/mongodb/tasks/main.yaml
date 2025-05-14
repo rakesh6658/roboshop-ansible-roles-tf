@@ -1,0 +1,29 @@
+- name: Copy mongo.repo
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+- name: copy catalogue.js
+  ansible.builtin.copy:
+    src: catalogue.js
+    dest: /app/schema/ 
+- name: installing mongodb
+  ansible.builtin.yum:
+    name: mongodb-org
+    state: installed
+- name: starting and enabling mongodb
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: yes       
+- name: Replace old hostname with new hostname
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'  
+        
+- name: restarting mongodb
+  ansible.builtin.service:
+    name: mongod
+    state: restarted    
+- name: loading schema
+  ansible.builtin.shell: mongosh --host localhost </app/schema/catalogue.js      
